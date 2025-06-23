@@ -19,8 +19,33 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
 
     @Override
     public List<Product> search(Integer categoryId, BigDecimal minPrice, BigDecimal maxPrice, String color) {
-        // Implement search logic
-        return new ArrayList<>(); // Placeholder
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM products WHERE (category_id = ? OR ? IS NULL) " +
+                "AND (price >= ? OR ? IS NULL) " +
+                "AND (price <= ? OR ? IS NULL) " +
+                "AND (color = ? OR ? IS NULL)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, categoryId);
+            statement.setObject(2, categoryId == null ? null : categoryId);
+            statement.setBigDecimal(3, minPrice);
+            statement.setObject(4, minPrice == null ? null : minPrice);
+            statement.setBigDecimal(5, maxPrice);
+            statement.setObject(6, maxPrice == null ? null : maxPrice);
+            statement.setString(7, color);
+            statement.setObject(8, color == null ? null : color);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                products.add(mapRow(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return products;
     }
 
     @Override
@@ -33,7 +58,6 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
 
             statement.setInt(1, categoryId);
             ResultSet resultSet = statement.executeQuery();
-
             while (resultSet.next()) {
                 products.add(mapRow(resultSet));
             }
@@ -46,24 +70,91 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
 
     @Override
     public Product getById(int productId) {
-        // Implement logic to get a product by ID
-        return null; // Placeholder
+        Product product = null;
+        String sql = "SELECT * FROM products WHERE product_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, productId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                product = mapRow(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return product;
     }
 
     @Override
     public Product create(Product product) {
-        // Implement logic to create a new product
-        return null; // Placeholder
+        String sql = "INSERT INTO products (name, price, category_id, description, color, image_url, stock, featured) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, product.getName());
+            statement.setBigDecimal(2, product.getPrice());
+            statement.setInt(3, product.getCategoryId());
+            statement.setString(4, product.getDescription());
+            statement.setString(5, product.getColor());
+            statement.setString(6, product.getImageUrl());
+            statement.setInt(7, product.getStock());
+            statement.setBoolean(8, product.isFeatured());
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    product.setProductId(generatedKeys.getInt(1)); // Set the generated ID
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return product;
     }
 
     @Override
     public void update(int productId, Product product) {
-        // Implement logic to update a product
+        String sql = "UPDATE products SET name = ?, price = ?, category_id = ?, description = ?, color = ?, " +
+                "image_url = ?, stock = ?, featured = ? WHERE product_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, product.getName());
+            statement.setBigDecimal(2, product.getPrice());
+            statement.setInt(3, product.getCategoryId());
+            statement.setString(4, product.getDescription());
+            statement.setString(5, product.getColor());
+            statement.setString(6, product.getImageUrl());
+            statement.setInt(7, product.getStock());
+            statement.setBoolean(8, product.isFeatured());
+            statement.setInt(9, productId);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
     }
 
     @Override
     public void delete(int productId) {
-        // Implement logic to delete a product
+        String sql = "DELETE FROM products WHERE product_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, productId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
     }
 
     @Override
@@ -74,7 +165,6 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
 
             statement.setInt(1, categoryId);
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
                 return resultSet.getBoolean(1); // Returns true if count > 0
             }

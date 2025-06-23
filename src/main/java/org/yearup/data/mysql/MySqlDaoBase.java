@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public abstract class MySqlDaoBase
 {
-    private DataSource dataSource;
+   protected final DataSource dataSource;
 
     @Autowired
     public MySqlDaoBase(DataSource dataSource)

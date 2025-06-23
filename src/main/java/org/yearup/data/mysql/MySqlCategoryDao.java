@@ -1,6 +1,6 @@
 package org.yearup.data.mysql;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
 
@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
 
     public MySqlCategoryDao(DataSource dataSource) {
@@ -103,6 +103,11 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         } catch (SQLException e) {
             e.printStackTrace(); // Handle exceptions appropriately
         }
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return false;
     }
 
     private Category mapRow(ResultSet row) throws SQLException {

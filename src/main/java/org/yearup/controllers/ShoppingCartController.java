@@ -1,59 +1,76 @@
 package org.yearup.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.yearup.data.CategoryDao;
-import org.yearup.data.ProductDao;
-import org.yearup.models.Category;
-import org.yearup.models.Product;
+import org.yearup.data.ShoppingCartDao;
+import org.yearup.models.ShoppingCart;
+import org.yearup.models.User;
 
-import java.util.List;
+/**
+ * REST controller for handling shopping cart operations.
+ * This controller provides endpoints to manage the shopping cart for authenticated users.
+ */
+@RestController
+@RequestMapping("/shopping_cart") // Base URL for shopping cart operations
+public class ShoppingCartController {
+    private final ShoppingCartDao shoppingCartDao; // DAO for shopping cart operations
 
-@RestController  // Makes this class a REST controller
-@RequestMapping("/categories")  // Maps this controller to the /categories URL
-@CrossOrigin  // Allows cross-origin requests
-public class ShoppingCartController
-{
-    private final CategoryDao categoryDao;
-    private final ProductDao productDao;
-
-    @Autowired  // Injects the CategoryDao and ProductDao
-    public ShoppingCartController(CategoryDao categoryDao, ProductDao productDao) {
-        this.categoryDao = categoryDao;
-        this.productDao = productDao;
+    /**
+     * Constructor with dependency injection.
+     * @param shoppingCartDao The shopping cart data access object.
+     */
+    public ShoppingCartController(ShoppingCartDao shoppingCartDao) {
+        this.shoppingCartDao = shoppingCartDao;
     }
 
-    @GetMapping  // Handles GET requests for all categories
-    public List<Category> getAll() {
-        return categoryDao.getAllCategories();  // Returns all categories
+    /**
+     * Gets the current user's shopping cart.
+     * @param user The authenticated user (automatically injected).
+     * @return The user's shopping cart.
+     */
+    @GetMapping
+    public ResponseEntity<ShoppingCart> getCart(@AuthenticationPrincipal User user) {
+        ShoppingCart cart = shoppingCartDao.getCartByUserId(user.getId());
+        return ResponseEntity.ok(cart); // Return the cart with 200 OK status
     }
 
-    @GetMapping("/{id}")  // Handles GET requests for a specific category by ID
-    public Category getById(@PathVariable int id) {
-        return categoryDao.getById(id);  // Returns the category by ID
+    /**
+     * Adds a product to the user's cart.
+     * @param user The authenticated user.
+     * @param productId The ID of the product to add.
+     * @return ResponseEntity indicating the result of the operation.
+     */
+    @PostMapping("/products/{productId}")
+    public ResponseEntity<Void> addItem(@AuthenticationPrincipal User user,
+                                        @PathVariable int productId) {
+        shoppingCartDao.addToCart(user.getId(), productId);
+        return ResponseEntity.status(201).build(); // Return 201 Created status
     }
 
-    @GetMapping("/{categoryId}/products")  // Handles GET requests for products in a specific category
-    public List<Product> getProductsById(@PathVariable int categoryId) {
-        return productDao.listByCategoryId(categoryId);  // Returns products by category ID
+    /**
+     * Updates the quantity of a product in the user's cart.
+     * @param user The authenticated user.
+     * @param productId The ID of the product to update.
+     * @param quantity The new quantity to set.
+     * @return ResponseEntity indicating the result of the operation.
+     */
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Void> updateQuantity(@AuthenticationPrincipal User user,
+                                               @PathVariable int productId,
+                                               @RequestBody int quantity) {
+        shoppingCartDao.updateQuantity(user.getId(), productId, quantity);
+        return ResponseEntity.noContent().build(); // Return 204 No Content status
     }
 
-    @PostMapping  // Handles POST requests to add a new category
-    @PreAuthorize("hasRole('ADMIN')")  // Ensures only ADMIN can call this function
-    public Category addCategory(@RequestBody Category category) {
-        return categoryDao.create(category);  // Inserts the category
-    }
-
-    @PutMapping("/{id}")  // Handles PUT requests to update a category
-    @PreAuthorize("hasRole('ADMIN')")  // Ensures only ADMIN can call this function
-    public void updateCategory(@PathVariable int id, @RequestBody Category category) {
-        categoryDao.update(id, category);  // Updates the category by ID
-    }
-
-    @DeleteMapping("/{id}")  // Handles DELETE requests to remove a category
-    @PreAuthorize("hasRole('ADMIN')")  // Ensures only ADMIN can call this function
-    public void deleteCategory(@PathVariable int id) {
-        categoryDao.delete(id);  // Deletes the category by ID
+    /**
+     * Clears all items from the user's cart.
+     * @param user The authenticated user.
+     * @return ResponseEntity indicating the result of the operation.
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> clearCart(@AuthenticationPrincipal User user) {
+        shoppingCartDao.clearCart(user.getId());
+        return ResponseEntity.noContent().build(); // Return 204 No Content status
     }
 }

@@ -98,8 +98,6 @@ public class TokenProvider implements InitializingBean
             logger.info("Token Invalid.");
             logger.trace("Token Invalid trace: {}.", e.toString());
         }
-
         return false;
     }
-
 }

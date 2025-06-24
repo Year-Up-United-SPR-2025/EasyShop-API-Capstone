@@ -1,16 +1,13 @@
 package org.yearup.data.mysql;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public abstract class MySqlDaoBase
 {
-   protected final DataSource dataSource;
+    private DataSource dataSource;
 
-    @Autowired
     public MySqlDaoBase(DataSource dataSource)
     {
         this.dataSource = dataSource;

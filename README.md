@@ -61,3 +61,6 @@ If you are using `Postman` and use the `Delete` send function this would pop up 
 
 # Future for this project 💬
 I plan to implement key features like adding items to your `cart`, deleting them when needed, creating new `user profiles`, and completing a full `checkout` process. I’m also aiming to enhance the user experience with better input validation and feedback messages. Eventually, I’d like to include order history tracking and maybe even basic payment simulation for a more complete e-commerce flow.
+
+# Pt 2 of Project
+Please follow this link for looking at the website https://github.com/Year-Up-United-SPR-2025/EasyShop-Website-Capstone

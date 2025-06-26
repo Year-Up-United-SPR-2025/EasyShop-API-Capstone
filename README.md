@@ -17,22 +17,22 @@ with the API witch is split into multiple packages and multiple sub packages whi
 
 # Screenshots 📸
 
-# Issues 🙃
+# Issues/Bugs 🙃🪰
 I encountered multiple issues when trying to run the program. Since I didn’t build it from scratch, I needed to take a full day to carefully read through all the packages and classes to understand the structure and how everything works together.
 
-Issue 1 💢
+Issue/Bug 1💢
 ---
 This project used `Java 17` instead of my local `Java 24` setup to avoid compatibility issues. Matching the environment helped everything run smoothly and highlighted the importance of version control.
 
-Issue 2 🗯️
+Issue/Bug 2 🗯️
 ---
 `Spring Boot’s` dependency management and bean configuration can cause conflicts when components aren’t wired properly, and I ran into several issues with missing or clashing beans due to unresolved dependencies in the `pom.xml`, which cost more time than expected to track down and fix.
 
-Issue 3 🫠
+Issue/Bug 3 🫠
 ---
 `Postman` occasionally required multiple sends to get a response, likely due to API compatibility issues between ``Java 17`` and my local ``Java 24`` setup. Subtle version differences or outdated `dependencies` may have caused glitches. Minor behavioral changes and module configuration in newer Java versions can also affect API responses.
 
-Issue 4 🤬
+Issue/Bug 4 🤬
 ---
 Due to repeated `Postman` requests, the data was processed on the `SQL` end but failed to post correctly, resulting in multiple identical entries being saved under different category IDs.
 

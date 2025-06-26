@@ -15,6 +15,20 @@ with the API witch is split into multiple packages and multiple sub packages whi
 * And Finally the `EasyshopApplication` class witch runs the program.
 
 # Screenshots 📸
+![Post.png](Screenshots/Post.png)
+
+In this image I use Postman to post my Query from postman into `MySQL`.
+
+![Get Cat.png](Screenshots/Get%20Cat.png)
+
+In this image you can see me get the info from `MySQL` and show it in `Postman`.
+
+![Put.png](Screenshots/Put.png)
+
+In this image you can see it  put new info from `Postman` to `MySQL`
+
+![Delete.png](Screenshots/Delete.png)
+This one deletes a query I made
 
 # Issues 🙃
 I encountered multiple issues when trying to run the program. Since I didn’t build it from scratch, I needed to take a full day to carefully read through all the packages and classes to understand the structure and how everything works together.
@@ -38,6 +52,12 @@ Due to repeated `Postman` requests, the data was processed on the `SQL` end but 
 Issue 5 😵‍💫
 ---
 If you check my commits, you'll see I made solid progress but had to restart multiple times. Each time I integrated new sections of code, things would break or stop working altogether. Despite the setbacks, I was able to meet the core requirements.
+
+Issue 6 😒
+---
+
+![Delete Issue.png](Screenshots/Issue%20screenshots/Delete%20Issue.png)
+If you are using `Postman` and use the `Delete` send function this would pop up but be gone in `MySql`
 
 # Future for this project 💬
 I plan to implement key features like adding items to your `cart`, deleting them when needed, creating new `user profiles`, and completing a full `checkout` process. I’m also aiming to enhance the user experience with better input validation and feedback messages. Eventually, I’d like to include order history tracking and maybe even basic payment simulation for a more complete e-commerce flow.

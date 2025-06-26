@@ -3,7 +3,7 @@ This final Capstone marks the culmination of everything I’ve learned throughou
 
 
 # Technology Used 🛒🛍️👨🏾‍💻
-For this capstone project, I used `MySQL` to create and manage the database, `IntelliJ IDEA` to develop the Java code, and `Postman` to test the API endpoints and ensure the application runs as expected.
+For this capstone project, I used `MySQL` for database management, worked within the provided `Spring Boot` framework, developed the Java code using `IntelliJ IDEA`, and used `Postman` to test API endpoints and verify functionality.
 
 # RoadMap 🛣️
 We had multiple Documentation for this one the biggest one was Dealing
@@ -18,6 +18,23 @@ with the API witch is split into multiple packages and multiple sub packages whi
 # Screenshots 📸
 
 # Issues 🙃
-I ran into multiple issues when trying to run this program 
+I encountered multiple issues when trying to run the program. Since I didn’t build it from scratch, I needed to take a full day to carefully read through all the packages and classes to understand the structure and how everything works together.
 
-# Parts Completed 🧩
+Issue 1 💢
+---
+This project used `Java 17` instead of my local `Java 24` setup to avoid compatibility issues. Matching the environment helped everything run smoothly and highlighted the importance of version control.
+
+Issue 2 🗯️
+---
+`Spring Boot’s` dependency management and bean configuration can cause conflicts when components aren’t wired properly, and I ran into several issues with missing or clashing beans due to unresolved dependencies in the `pom.xml`, which cost more time than expected to track down and fix.
+
+Issue 3 🫠
+---
+`Postman` occasionally required multiple sends to get a response, likely due to API compatibility issues between ``Java 17`` and my local ``Java 24`` setup. Subtle version differences or outdated `dependencies` may have caused glitches. Minor behavioral changes and module configuration in newer Java versions can also affect API responses.
+
+Issue 4 🤬
+---
+Due to repeated `Postman` requests, the data was processed on the `SQL` end but failed to post correctly, resulting in multiple identical entries being saved under different category IDs.
+
+
+# Future for this project 💬
